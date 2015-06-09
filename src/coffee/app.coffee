@@ -16,7 +16,7 @@ app = require('./module')
 
 require('./views')
 
-app.config ($routeProvider) ->
+app.config ($routeProvider, $httpProvider) ->
   rp = $routeProvider.when '/',
     name: 'home'
     templateUrl: '/views/home.html'
@@ -24,6 +24,8 @@ app.config ($routeProvider) ->
 
   rp.otherwise
     templateUrl: '/views/404.html'
+
+  $httpProvider.defaults.headers.common['Content-Type'] = 'application/json; charset=utf-8'
 
 app.config () ->
   console.log 'config'
@@ -37,27 +39,49 @@ config = {
 }
 oauth_server = 'http://aidbox.hs'
 
-app.run ($rootScope, $window, $location, $http)->
+app.run ($rootScope, $window, $location, $http, $cookies)->
   query = URI(window.location.search).query(true)
-
+  # TODO: clear
   loginUrl = "#{oauth_server}/oauth/token?grant_type=#{config.grant_type}&client_id=#{config.client_id}&scope=#{config.ups}&redirect_uri=#{config.redirect_uri}"
 
-  if !query.access_token
-    window.location.href = loginUrl
+  if query.access_token
+    $cookies.put 'access_token', query.access_token
+    window.close()
 
-  $rootScope.access_token = query.access_token
-  $http.get oauth_server+'/user', { params :  {access_token : $rootScope.access_token }}
-    .success (data)->
-      $rootScope.user = data
-      console.log data
+  $rootScope.access_token = ()->
+    if $cookies.get 'access_token'
+      $cookies.get 'access_token'
+    else
+      $rootScope.signin()
   
+  $rootScope.signin = ()->
+    window.open(loginUrl, "SignIn", "width=780,height=410,toolbar=0,scrollbars=0,status=0,resizable=0,location=0,menuBar=0,left=100,top=100")
+  
+  $rootScope.signout = ()->
+    $http.get oauth_server+'/signout', { params : {access_token : $rootScope.access_token() }}
+      .success (data)->
+        $rootScope.user = null
+        $cookies.remove 'access_token'
+
+  $rootScope.getUserData = ()->
+    $http.get oauth_server+'/user', { params : {access_token : $rootScope.access_token() }}
+      .success (data)->
+        $rootScope.user = data
+        console.log data
+  
+  if $cookies.get 'access_token'
+    $rootScope.getUserData()
+
+app.controller 'MainCtrl', ($scope, $http, $rootScope)->
+  console.log 'MainCtrl'
 
 app.controller 'HomeCtrl', ($scope, $http, $rootScope)->
-  console.log $rootScope.access_token
-  $http.get oauth_server+'/fhir/SearchParameter/_search', { params :  {access_token : $rootScope.access_token }}
+###
+  $http.get oauth_server+'/fhir/SearchParameter/_search', { params :  {access_token : $rootScope.access_token() }}
     .success (data)->
       $scope.data = data
       console.log data
+###
 
 
 app.controller 'PageCtrl', ($scope, $routeParams)->

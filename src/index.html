@@ -12,14 +12,6 @@
 </head>
 <body>
 <!-- Static navbar -->
-<div class="config" ng-hide="config.base_uri && config.authorize_uri && config.client_id">
-<span ng-hide="config.base_uri" class="alert alert-danger">Please specify <strong>base_uri</strong></span>
-<span ng-hide="config.authorize_uri" class="alert alert-danger">Please
-specify <strong>authorize_uri</strong></span>
-<span ng-hide="config.client_id" class="alert alert-danger">Please
-  specify <strong>client_id</strong></span>
-</div>
-
 <nav class="navbar navbar-default navbar-static-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
@@ -43,7 +35,7 @@ specify <strong>authorize_uri</strong></span>
           </a>
         </li>
       </ul>
-      <ul class="nav navbar-nav navbar-right">
+      <ul class="nav navbar-nav navbar-right" ng-controller="MainCtrl">
         <li ng-repeat="item in ::sitemap.user">
           <a href="{{::item.href}}">
             <i ng-if="::item.icon" class="fa fa-{{::item.icon}}"></i>
@@ -54,9 +46,11 @@ specify <strong>authorize_uri</strong></span>
           <strong>User: {{user.login}}</strong> | scope:
           {{user.scope}}
         </li>
+        <li>
+          <button ng-click="signin()" class="btn btn-danger">Sign in</button>
+        </li>
         <li ng-if="user.login">
-          <button ng-click="revoke()" class="btn btn-danger">Sign
-          out</button>
+          <button ng-click="signout()" class="btn btn-danger">Sign out</button>
         </li>
       </ul>
     </div><!--/.nav-collapse -->
