@@ -14,7 +14,7 @@ app = require('./module')
 require('./views')
 require('./aidbox')
 
-app.config ($routeProvider, $httpProvider) ->
+app.config ($routeProvider, $httpProvider, $locationProvider) ->
   rp = $routeProvider.when '/',
     name: 'home'
     templateUrl: '/views/home.html'
@@ -25,15 +25,14 @@ app.config ($routeProvider, $httpProvider) ->
 
   $httpProvider.defaults.headers.common['Content-Type'] = 'application/json; charset=utf-8'
 
-app.config () ->
-
 app.run ($rootScope, $window, $location, $http, $cookies, $aidbox)->
+  $aidbox.init
+    client_id:'implicit'
+    box_url: 'http://aidbox.hs'
 
 app.controller 'MainCtrl', ($scope, $http, $rootScope, $aidbox)->
-  $scope.signin = ()->
-    $aidbox.signin()
-  $scope.signout = ()->
-    $aidbox.signout()
+  $scope.signin = $aidbox.signin
+  $scope.signout = $aidbox.signout
 
 app.controller 'HomeCtrl', ($scope, $http, $rootScope)->
 

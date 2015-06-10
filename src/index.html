@@ -1,14 +1,15 @@
 <!doctype html>
 <html ng-app="app">
 <head>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title></title>
-<meta name="description" content="">
-<meta name="viewport" content="width=device-width">
-<link rel="shortcut icon" href="imgs/logo.png">
-<!-- <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" /> -->
-<link rel="stylesheet" href="app.css" />
+  <base href="/">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Sample app</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width">
+  <link rel="shortcut icon" href="imgs/logo.png">
+  <!-- <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" /> -->
+  <link rel="stylesheet" href="app.css" />
 </head>
 <body>
 <!-- Static navbar -->
@@ -51,6 +52,9 @@
         </li>
         <li>
           <button ng-click="signout()" class="btn btn-danger">Sign out</button>
+        </li>
+        <li>
+          <button ng-click="clear()" class="btn btn-danger">Clear</button>
         </li>
       </ul>
     </div><!--/.nav-collapse -->
