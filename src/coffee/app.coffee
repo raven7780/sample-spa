@@ -30,7 +30,6 @@ app.config () ->
 app.run ($rootScope, $window, $location, $http, $cookies, $aidbox)->
 
 app.controller 'MainCtrl', ($scope, $http, $rootScope, $aidbox)->
-  $aidbox.run()
   $scope.signin = ()->
     $aidbox.signin()
   $scope.signout = ()->
