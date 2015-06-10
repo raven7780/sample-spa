@@ -14,7 +14,7 @@ app = require('./module')
 require('./views')
 require('./aidbox')
 
-app.config ($routeProvider, $httpProvider, $locationProvider) ->
+app.config ($routeProvider, $httpProvider) ->
   rp = $routeProvider.when '/',
     name: 'home'
     templateUrl: '/views/home.html'
@@ -32,9 +32,15 @@ app.run ($rootScope, $window, $location, $http, $cookies, $aidbox)->
 
 app.controller 'MainCtrl', ($scope, $http, $rootScope, $aidbox)->
   $scope.signin = $aidbox.signin
-  $scope.signout = $aidbox.signout
+  $scope.signout = $aidbox.user
 
-app.controller 'HomeCtrl', ($scope, $http, $rootScope)->
+
+app.controller 'HomeCtrl', ($scope, $http, $rootScope, $aidbox)->
+  $aidbox.user (data)->
+    $rootScope.user = data
+
+  $aidbox.patients (data)->
+    $rootScope.data = data
 
 
 app.controller 'PageCtrl', ($scope, $routeParams)->

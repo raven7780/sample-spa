@@ -1,7 +1,7 @@
 app = require('./module')
 URI = require('../../bower_components/uri.js/src/URI.js')
 
-app.service '$aidbox', ($rootScope, $http, $cookies, $window, $location)->
+app.service '$aidbox', ($rootScope, $http, $cookies, $window)->
   uri = URI($window.location)
   config = {
     client_id    : ''
@@ -9,8 +9,7 @@ app.service '$aidbox', ($rootScope, $http, $cookies, $window, $location)->
     scope        : 'ups'
     redirect_uri : uri.protocol()+'://'+uri.host()
   }
-  box_url = ''
-  
+  box_url= 'http://aidbox.hs'
   query = URI($window.location.search).search(true)
 
   loginUrl = ()->
@@ -36,20 +35,14 @@ app.service '$aidbox', ($rootScope, $http, $cookies, $window, $location)->
     # Remove AT from uri and close modal window
     if query.access_token
       $cookies.put 'ab_'+config.client_id, query.access_token
-      q = URI($window.location)
-        .removeQuery('access_token').resource()
-        .toString()
-      $window.history.pushState(null, '', q)
-      
       if $window.opener
         $window.close()
 
-
-  @signin= (win)->
+  @signin= (w)->
     if access_token()
       console.log 'You are signed in'
     else
-      if win
+      if w
         $window.location.href=loginUrl()
       else
         $window.open(loginUrl(), "SignIn to you Box", "width=780,height=410,toolbar=0,scrollbars=0,status=0,resizable=0,location=0,menuBar=0,left=100,top=100")
@@ -65,5 +58,15 @@ app.service '$aidbox', ($rootScope, $http, $cookies, $window, $location)->
           console.log "Wrong access_token", err
     else
       console.log "You are not logged"
+
+  @user = (callback)->
+    $http.get box_url+'/user', { params : {access_token : access_token() }}
+      .success (data)->
+        callback data
+  
+  @patients = (callback)->
+    $http.get box_url+'/fhir/SearchParameter/_search', { params : {access_token : access_token() } }
+      .success (data)->
+        callback data
 
   @
