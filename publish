@@ -1,8 +1,0 @@
-#!/bin/bash
-set +e # break script on first error
-
-#APP='sample'
-npm run-script build
-tar cvzf app.tar.gz -C dist .
-curl -F "file=@./app.tar.gz;filename=file" http://aidbox.hs/deploy
-rm -rf app.tar.gz

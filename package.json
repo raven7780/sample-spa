@@ -24,7 +24,5 @@
     "install": "bower prune && bower install",
     "start": "bower prune && bower install && webpack-dev-server --port $PORT --progress --colors",
     "build": "npm install && rm -rf dist && webpack --progress --colors",
-    "aidbox": "npm run-script build && `npm bin`/aidbox",
-    "deploy": "`npm bin`/aidbox"
   }
 }
