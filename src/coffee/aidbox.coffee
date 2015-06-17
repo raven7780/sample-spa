@@ -9,7 +9,7 @@ app.service '$aidbox', ($rootScope, $http, $cookies, $window)->
     scope        : 'ups'
     redirect_uri : uri.protocol()+'://'+uri.host()
   }
-  box_url= 'http://aidbox.hs'
+  box_url= 'http://box.aidbox.hs'
   query = URI($window.location.search).search(true)
 
   loginUrl = ()->
@@ -45,7 +45,7 @@ app.service '$aidbox', ($rootScope, $http, $cookies, $window)->
       if w
         $window.location.href=loginUrl()
       else
-        $window.open(loginUrl(), "SignIn to you Box", "width=780,height=410,toolbar=0,scrollbars=0,status=0,resizable=0,location=0,menuBar=0,left=100,top=100")
+        $window.open(loginUrl(), "SignIn to you Box", "width=780,height=410,toolbar=0,scrollbars=0,status=0,resizable=0,left=100,top=100")
   
   @signout= ()->
     if access_token()

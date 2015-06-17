@@ -27,12 +27,12 @@ app.config ($routeProvider, $httpProvider) ->
 
 app.run ($rootScope, $window, $location, $http, $cookies, $aidbox)->
   $aidbox.init
-    client_id:'implicit'
-    box_url: 'http://aidbox.hs'
+    client_id: 'root'
+    box_url:   'http://marat.aidbox.io'
 
 app.controller 'MainCtrl', ($scope, $http, $rootScope, $aidbox)->
   $scope.signin = $aidbox.signin
-  $scope.signout = $aidbox.user
+  $scope.signout = $aidbox.signout
 
 
 app.controller 'HomeCtrl', ($scope, $http, $rootScope, $aidbox)->
