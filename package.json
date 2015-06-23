@@ -2,7 +2,7 @@
   "name": "Aidbox-sample-spa",
   "version": "0.0.0",
   "dependencies": {
-    "angular-aidbox": "file:../angular-aidbox"
+    "angular-aidbox": "file:../dist"
   },
   "devDependencies": {
     "aidbox-cli": "latest",

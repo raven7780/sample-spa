@@ -39,9 +39,60 @@
         </div><!--/.nav-collapse -->
       </div>
     </nav>
+
     <div class="container">
-      <pre>{{user}}</pre>
+      <div ng-if="err" class="alert alert-danger">
+        <pre>{{err | json}}</pre>
+      </div>
+
+      <form ng-submit="create()">
+        <div class="form-group">
+          <label>Given</label>    
+          <input class="form-control" type="text" ng-model="newPatient.given"/>
+        </div>
+        <div class="form-group">
+          <label>Family</label>    
+          <input class="form-control" type="text" ng-model="newPatient.family"/>
+        </div>
+       
+        <div class="form-group"> 
+          <label>Gender</label>
+          <select class="form-control">
+            <option value="male">Male</option>
+          </select>
+        </div>
+        
+        <!--<div class="form-group">-->
+          <!--<label>Birthday</label>-->
+          <!--<input class="form-control" type="input" ng-model="newPatient.birthday"/>  -->
+        <!--</div>-->
+
+        <button type="submit" class="btn btn-default">Create</button>
+      </form>
+
+      <br />
+      <br />
+      <label>Search</label>
+      <input type="text" class="form-control" ng-model="search" />
+
+      <table class="table table-condensed">
+        <thead> <tr>
+          <th>Given</th>
+          <th>Family</th>
+          <th>Action</th>
+        </tr></thead>
+        <tr ng-repeat="pt in patients.entry" >
+          <td>{{pt.resource.name[0].given[0]}}</td>
+          <td>{{pt.resource.name[0].family[0]}}</td>
+          <td>
+            <a ng-click="delete(pt.resource.id)" href="#" title="Delete patient"><i class="glyphicon glyphicon-remove"></i></a>  
+            <a href="#" title="Edit patient"><i class="glyphicon glyphicon-edit"></i></a>
+          </td>
+        </tr>
+      </table>
+
     </div>
+
 
     <script src="app.js"></script>
   </body>

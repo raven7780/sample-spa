@@ -100,12 +100,8 @@
 	    }
 	  };
 	  this.signin = function(userCb) {
-	    if (access_token()) {
-	      return console.log('You are signed in');
-	    } else {
-	      $window.open(loginUrl(), "SignIn to you Box", "width=780,height=410,toolbar=0,scrollbars=0,status=0,resizable=0,left=100,top=100");
-	      return true;
-	    }
+	    $window.open(loginUrl(), "SignIn to you Box", "width=780,height=410,toolbar=0,scrollbars=0,status=0,resizable=0,left=100,top=100");
+	    return true;
 	  };
 	  this.signout = function() {
 	    if (access_token()) {
@@ -134,6 +130,20 @@
 	        return callback(data);
 	      }
 	    });
+	  };
+	  this.http = function(opts) {
+	    var args;
+	    opts.params || (opts.params = {});
+	    angular.extend(opts.params, {
+	      access_token: access_token()
+	    });
+	    args = {
+	      url: "" + box_url + opts.url,
+	      params: opts.params,
+	      method: opts.method || 'GET',
+	      data: opts.data
+	    };
+	    return $http(args);
 	  };
 	  return this;
 	});
@@ -2772,7 +2782,7 @@
 
 /***/ },
 /* 3 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
 	module.exports = function(module) {
 		if(!module.webpackPolyfill) {
