@@ -27,13 +27,13 @@
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
             <li ng-if="user" class="login">
-              <a>{{user.email}}</a>
+              <a href="#">{{user.email}}</a>
             </li>
             <li ng-if="!user">
-              <a ng-click="auth.signin()" >Sign in</a>
+              <a ng-click="auth.signin()" href="#">Sign in</a>
             </li>
             <li ng-if="user">
-              <a ng-click="auth.signout()" >Sign out</a>
+              <a ng-click="auth.signout()" href="#">Sign out</a>
             </li>
           </ul>
         </div><!--/.nav-collapse -->
@@ -72,7 +72,7 @@
 
       <br />
       <br />
-      <label>Search</label>
+      <label>Search by name</label>
       <input type="text" class="form-control" ng-model="search" />
 
       <table class="table table-condensed">
@@ -81,6 +81,14 @@
           <th>Family</th>
           <th>Action</th>
         </tr></thead>
+
+        <tr>
+          <form ng-submit="create()">
+            <td> <input class="form-control" type="text" ng-model="newPatient.given"/> </td>
+            <td> <input class="form-control" type="text" ng-model="newPatient.family"/> </td>
+            <td> <input type="submit" value="Add new"/> </td>
+        </tr>
+
         <tr ng-repeat="pt in patients.entry" >
           <td>{{pt.resource.name[0].given[0]}}</td>
           <td>{{pt.resource.name[0].family[0]}}</td>

@@ -65,6 +65,7 @@ app.run(function($rootScope, $aidbox){
       data: JSON.stringify(data)
     }).success(function(data){
       searchPatient();
+      $rootScope.newPatient = null;
     }).error(function(data, response){
       $rootScope.err = data;
     });
