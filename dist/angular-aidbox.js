@@ -50,8 +50,8 @@
 
 	mod = angular.module('ngAidbox', ['ng']);
 
-	mod.service('$aidbox', function($http, $cookies, $window) {
-	  var access_token, box_url, config, loginUrl, out, query;
+	mod.service('$aidbox', function($http, $cookies, $window, $q) {
+	  var access_token, box_url, config, http, loginUrl, out, query;
 	  config = {
 	    client_id: 'site',
 	    grant_type: 'implicit',
@@ -131,7 +131,7 @@
 	      }
 	    });
 	  };
-	  this.http = function(opts) {
+	  http = function(opts) {
 	    var args;
 	    opts.params || (opts.params = {});
 	    angular.extend(opts.params, {
@@ -144,6 +144,27 @@
 	      data: opts.data
 	    };
 	    return $http(args);
+	  };
+	  this.http = http;
+	  this.fhir = {
+	    valueSet: {
+	      expand: function(id, filter) {
+	        var deferred;
+	        deferred = $q.defer();
+	        http({
+	          url: "/fhir/ValueSet/" + id + "/$expand",
+	          method: 'GET',
+	          params: {
+	            filter: filter
+	          }
+	        }).success(function(data) {
+	          return deferred.resolve(data.expansion.contains);
+	        }).error(function(err) {
+	          return deferred.reject(err);
+	        });
+	        return deferred.promise;
+	      }
+	    }
 	  };
 	  return this;
 	});
