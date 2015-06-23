@@ -1,5 +1,5 @@
 {
-  "name": "sample aidbox spa",
+  "name": "Aidbox-sample-spa",
   "version": "0.0.0",
   "dependencies": {
     "angular-aidbox": "file:../angular-aidbox"
