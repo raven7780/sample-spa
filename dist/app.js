@@ -49,7 +49,7 @@ app.run(function($rootScope, $aidbox){
  }
 
   $aidbox.init({
-    box:   'http://test.aidbox.hs',
+    box:   'https://nicola.aidbox.io',
     onUser: function(user){
       $rootScope.user = user;
       searchPatient();
