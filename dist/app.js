@@ -1,6 +1,6 @@
 (function() {
 
-    var BOX_URL = 'https://nicola.aidbox.io';
+    var BOX_URL = 'https://marat.aidbox.io';
 
     function getIn(obj, path) {
         var t = obj;
