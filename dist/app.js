@@ -1,6 +1,6 @@
 (function() {
 
-    var BOX_URL = 'https://marat.aidbox.io';
+    var BOX_URL = 'https://mysuperapp.aidbox.io';
 
     function getIn(obj, path) {
         var t = obj;
@@ -46,7 +46,7 @@
             $aidbox.http({
                 url: '/fhir/Patient/_search',
                 params: {name: name, _sort: 'name'}
-            }).success(function(data) {
+            }).then(function(data) {
                 $rootScope.patients = data.entry.map(mapPatient);
             });
         };
@@ -84,7 +84,7 @@
             $aidbox.http({
                 url: '/fhir/Patient/' + pt.id,
                 method: 'DELETE'
-            }).success(searchPatient).error(handleError)
+            }).then(searchPatient, handleError)
         };
 
         $rootScope.auth = {
@@ -100,7 +100,7 @@
                 url: '/fhir/Patient/' + pt.id,
                 method: 'PUT',
                 data: fillPatient(pt)
-            }).success(searchPatient).error(handleError);
+            }).then(searchPatient, handleError);
         };
 
         $rootScope.create = function() {
@@ -109,10 +109,10 @@
                 url: '/fhir/Patient',
                 method: 'POST',
                 data: fillPatient(pt)
-            }).success(function(data) {
+            }).then(function(data) {
                 searchPatient();
                 $rootScope.newPatient = {};
-            }).error(handleError);
+            }, handleError);
         };
     });
 })();
