@@ -1,15 +1,17 @@
 {
   "name": "Aidbox-sample-spa",
   "version": "0.0.0",
-  "dependencies": { },
+  "dependencies": {
+    "http-server": "^0.9.0"
+  },
   "devDependencies": {
     "aidbox-cli": "latest",
-    "http-server": "latest"
+    "http-server": "^0.9.0"
   },
   "engines": {
     "node": ">=0.12.0"
   },
   "scripts": {
-    "start": "`npm bin`/http-server dist -p 5000"
+    "start": "./node_modules/.bin/http-server dist -p 5000"
   }
 }
