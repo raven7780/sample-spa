@@ -233,6 +233,7 @@
 	  var access_token, config, http, out, read_access_token, update_access_token;
 	  config = {
 	    flow: 'popup',
+	    // client_id: 'implicit_client123',
 	    client_id: 'site',
 	    box: null,
 	    grant_type: 'implicit',

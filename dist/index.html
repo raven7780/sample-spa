@@ -3,10 +3,10 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Sample app</title>
+    <title>Sample App</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
-    <link rel="shortcut icon" href="imgs/logo.png">
+    <link rel='shortcut icon' href='imgs/favicon.ico' type='image/x-icon'/ >
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
     <link rel="stylesheet" href="./style.css"/>
     <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.1/angular.min.js" ></script>
@@ -17,6 +17,9 @@
     <nav class="navbar navbar-default navbar-static-top" role="navigation">
       <div class="container">
         <div id="navbar" class="navbar">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="#"><img src="imgs/logo.png"/> Sample Application</a>
+          </div>
           <ul class="nav navbar-nav navbar-right">
             <li ng-if="user" class="login">
               <a href="#">{{user.email}}</a>
@@ -33,36 +36,48 @@
     </nav>
 
     <div ng-show="user" class="container ng-hide">
-      <h1>Patients list</h1>
+      <div ng-if = "currentPage == 'patientList'" >
+        <h1>Patient List</h1>
 
-      <div ng-if="err" class="alert alert-danger">
-        <pre>{{err | json}}</pre>
+        <div ng-if="err" class="alert alert-danger">
+          <pre>{{err | json}}</pre>
+        </div>
+
+        <label>Search patients by name</label>
+        <input type="text" class="form-control patient-search" ng-model="search.name" ng-change="searchPatient()" placeholder="Name" />
+
+        <table class="table table-condensed">
+          <thead> <tr>
+            <th>Given</th> <th>Family</th> <th>Gender</th> <th>Action</th>
+          </tr></thead>
+          <tr ng-repeat="pt in patients track by pt.id" >
+            <td> <input class="form-control" type="text" ng-model="pt.given"/> </td>
+            <td> <input class="form-control" type="text" ng-model="pt.family"/> </td>
+            <td> <select  class="form-control" ng-options="item as item.display for item in genders track by item.code" ng-model="pt.gender"></select> </td>
+            <td>
+              <button class="btn btn-info"  ng-click="update(pt)" title="Update patient" ><i class="glyphicon glyphicon-edit"></i></button>
+              <button class="btn btn-danger" ng-click="delete(pt)" title="Delete patient"><i class="glyphicon glyphicon-remove"></i></button>
+                <button class="btn btn-primary" ng-click="open(pt)" title="Open patient's chart"><i class="glyphicon glyphicon-user"></i></button>
+            </td>
+          </tr>
+          <tr>
+            <td> <input class="form-control" type="text" ng-model="newPatient.given" placeholder="Name"/> </td>
+            <td> <input class="form-control" type="text" ng-model="newPatient.family"  placeholder="Family"/> </td>
+            <td> <select  class="form-control" ng-options="item as item.display for item in genders track by item.code" ng-model="newPatient.gender"></select> </td>
+            <td> <input type="submit" class="btn btn-success" value="Add patient" ng-click="create()"/> </td>
+          </tr>
+        </table>
       </div>
-
-      <label>Search patient by name</label>
-      <input type="text" class="form-control patient-search" ng-model="search.name" ng-change="searchPatient()" placeholder="Name" />
-
-      <table class="table table-condensed">
-        <thead> <tr>
-          <th>Given</th> <th>Family</th> <th>Gender</th> <th>Action</th>
-        </tr></thead>
-        <tr ng-repeat="pt in patients track by pt.id" >
-          <td> <input class="form-control" type="text" ng-model="pt.given"/> </td>
-          <td> <input class="form-control" type="text" ng-model="pt.family"/> </td>
-          <td> <select  class="form-control" ng-options="item as item.display for item in genders track by item.code" ng-model="pt.gender"></select> </td>
-          <td>
-            <button class="btn btn-info"  ng-click="update(pt)" title="Updte patient" ><i class="glyphicon glyphicon-edit"></i></button>
-            <button class="btn btn-danger" ng-click="delete(pt)" title="Delete patient"><i class="glyphicon glyphicon-remove"></i></button>  
-          </td>
-        </tr>
-        <tr>
-          <td> <input class="form-control" type="text" ng-model="newPatient.given" placeholder="Name"/> </td>
-          <td> <input class="form-control" type="text" ng-model="newPatient.family"  placeholder="Family"/> </td>
-          <td> <select  class="form-control" ng-options="item as item.display for item in genders track by item.code" ng-model="newPatient.gender"></select> </td>
-          <td> <input type="submit" class="btn btn-success" value="Add patient" ng-click="create()"/> </td>
-        </tr>
-      </table>
-    
+      
+      <div ng-if = "currentPage == 'patientRecord'" ng-controller = "PatientChartController as ptChartCtrl">
+        <h1>Patient: {{ptChartCtrl.patient.name}}</h1>
+        <button class="btn btn-primary" ng-click="backToList()" title="Back to Patient List"><i class="glyphicon glyphicon-list-alt"></i></button>  
+        <h3>gender = {{ptChartCtrl.patient.gender || "gender not found"}}</h3>
+        <h3>id = {{ptChartCtrl.patient.id || "id not found"}}</h3>
+        <p>{{ptChartCtrl.patient.data || "patient data not found"}}</p>
+        
+      </div>
+      
     </div>
 
     <script src="app.js"></script>

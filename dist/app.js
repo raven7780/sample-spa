@@ -1,6 +1,6 @@
 (function() {
 
-    var BOX_URL = 'https://mysuperapp.aidbox.io';
+    var BOX_URL = 'http://manila.dev.aidbox.io';
 
     function getIn(obj, path) {
         var t = obj;
@@ -12,7 +12,9 @@
         }
         return t;
     }
+    
 
+        
     function mapPatient(entry) {
         return {
             id: entry.resource.id,
@@ -39,6 +41,26 @@
     };
 
     var app = angular.module('app', ['ngCookies', 'ngAidbox']);
+  
+        app.controller('PatientChartController', ['$http', '$aidbox', '$rootScope', function($http, $aidbox, $rootScope) {
+          this.name = "";
+          var self = this;
+          self.patient = {};
+          $aidbox.http({
+            url: '/fhir/Patient/' + $rootScope.currentPatientId,
+            params: {}
+          }).then(function(data){
+            self.patient.data = data;
+            // console.log(self.patient.data);
+            self.patient.family = getIn(self.patient.data, ['name', 0, 'family', 0]);
+            self.patient.given = getIn(self.patient.data, ['name', 0, 'given', 0]);
+            if (self.patient.family || self.patient.given) {
+              self.patient.name = (self.patient.family || "not found")  + ", " +  (self.patient.given || "not found"); 
+            } else {self.patient.name = "name not found"};
+            self.patient.gender = getIn(self.patient.data, ['gender', 'coding', 0, 'display'])
+            self.patient.id = self.patient.data.id;
+          });
+        }]);
 
     app.run(function($rootScope, $aidbox) {
         var searchPatient = function() {
@@ -58,6 +80,7 @@
         $rootScope.newPatient = {};
         $rootScope.search = {};
         $rootScope.searchPatient = searchPatient;
+        $rootScope.currentPage = 'patientList';  
 
         var loadGenders = function() {
             $aidbox.fhir.valueSet.expand('administrative-gender')
@@ -71,7 +94,7 @@
         $aidbox.init({
             box: BOX_URL,
             onSignIn: function(user) {
-                $rootScope.user = user;
+                $rootScope.user = user;                         
                 searchPatient();
                 loadGenders()
             },
@@ -101,6 +124,15 @@
                 method: 'PUT',
                 data: fillPatient(pt)
             }).then(searchPatient, handleError);
+        }; 
+        
+        $rootScope.open = function(pt) {
+            $rootScope.currentPatientId = pt.id;
+            $rootScope.currentPage = 'patientRecord';
+        };        
+        
+        $rootScope.backToList = function() {            
+            $rootScope.currentPage = 'patientList';
         };
 
         $rootScope.create = function() {

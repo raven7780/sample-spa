@@ -1,3 +1,7 @@
 .patient-search{
   width: 200px;
 }
+
+.navbar-brand>img {
+    display: inline;
+}
