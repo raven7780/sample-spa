@@ -1,6 +1,7 @@
 (function() {
 
-    var BOX_URL = 'http://manila.dev.aidbox.io';
+    //var BOX_URL = 'http://manila.dev.aidbox.io';
+    //var BOX_URL = 'https://marat.aidbox.io';
 
     function getIn(obj, path) {
         var t = obj;
@@ -28,8 +29,8 @@
         var res = {
             name: [{
                 use: 'official',
-                given: pt.given,
-                family: pt.family
+                given: [pt.given],
+                family: [pt.family]
             }],
             gender: pt.gender,
             resourceType: 'Patient'
